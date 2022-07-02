@@ -31,15 +31,22 @@ public class Controller2D : MonoBehaviour
 
     void Movement()
     {
+        //Character Move(Left,Right)
         direction = Player.position;
         direction.y = direction.y - 1f;
         Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
         controller.Move(move * Time.deltaTime * speed);
+        if (move != Vector3.zero)
+        {
+            transform.right = move;
+        }
 
         /*float horizontal = Input.GetAxis("Horizontal");
         direction.x = horizontal * speed;
 
         controller.Move(direction * Time.deltaTime);*/
+
+        //Jump
         Vec.y += GravityValue * Time.deltaTime;
         controller.Move(Vec * Time.deltaTime);
         if (Input.GetKeyDown(KeyCode.Space) && JumpLimit > 1)
@@ -49,6 +56,7 @@ public class Controller2D : MonoBehaviour
             Debug.Log("Jump");
         }
 
+        //CheckGround
         if (Physics.CheckSphere(direction, SphereRadius, layerMask))
         {
             JumpLimit = 2;
@@ -77,4 +85,9 @@ public class Controller2D : MonoBehaviour
             Debug.Log("Jump");
         }
     }*/
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        
+    }
 }
