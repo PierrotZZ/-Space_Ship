@@ -7,12 +7,18 @@ public class Controller2D : MonoBehaviour
     public CharacterController controller;
     private Vector3 direction;
     public Transform Player;
+    //public Rigidbody rbPlayer;
     
     public float speed = 6f;
+    public float rotationSpeed;
     public float JumpHeight;
+    public float KnokUp;
     public float GravityValue;
     public float SphereRadius;
     public float JumpLimit = 2;
+
+    public float Health = 3;
+
     public LayerMask layerMask;
 
     //public Rigidbody rb;
@@ -38,7 +44,9 @@ public class Controller2D : MonoBehaviour
         controller.Move(move * Time.deltaTime * speed);
         if (move != Vector3.zero)
         {
-            transform.right = move;
+            //transform.right = move;
+            Quaternion toRotation = Quaternion.LookRotation(-move, Vector3.right);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
         }
 
         /*float horizontal = Input.GetAxis("Horizontal");
@@ -53,14 +61,14 @@ public class Controller2D : MonoBehaviour
         {
             Vec.y = Mathf.Sqrt(JumpHeight * -3f * GravityValue);
             JumpLimit -= 1;
-            Debug.Log("Jump");
+            //Debug.Log("Jump");
         }
 
         //CheckGround
         if (Physics.CheckSphere(direction, SphereRadius, layerMask))
         {
             JumpLimit = 2;
-            Debug.Log("Yo");
+            //Debug.Log("Yo");
         }
     }
 
@@ -88,6 +96,24 @@ public class Controller2D : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        
+        Vector3 knokback = new Vector3(-600, 500, 0);
+        if( collision.collider.tag == "LoseHP")
+        {
+            Health = Health - 1;
+            //Vec.y = Mathf.Sqrt(KnokUp * -3f * GravityValue);
+            Debug.Log(Health);
+        }
     }
+
+    /*public IEnumerator knokback(float knokDur, float knokbackPwr, Vector3 knokbackDir)
+    {
+        float timer = 1;
+        while (knokDur > timer)
+        {
+            timer += Time.deltaTime;
+            rbPlayer.AddForce(new Vector3(knokbackDir.x * -100, knokbackDir.y * knokbackPwr, transform.position.z));
+            Debug.Log(timer);
+        }
+        yield return 0;
+    }*/
 }
